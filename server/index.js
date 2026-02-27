@@ -28,6 +28,19 @@ app.use("/uploads", express.static(uploadsDir));
 // ── Routes ───────────────────────────────────────────────
 app.use("/api/products", require("./routes/products"));
 
+// ── تقديم واجهة المستخدم في الإنتاج ───────────────
+const frontendDist = path.join(__dirname, "../dist");
+if (fs.existsSync(frontendDist)) {
+    app.use(express.static(frontendDist));
+    app.get("*", (req, res, next) => {
+        if (!req.path.startsWith('/api') && !req.path.startsWith('/uploads')) {
+            res.sendFile(path.join(frontendDist, "index.html"));
+        } else {
+            next();
+        }
+    });
+}
+
 // ── Health check ─────────────────────────────────────────
 app.get("/api/health", (_req, res) => {
     res.json({ status: "ok", message: "دار الأصالة API يعمل بشكل طبيعي 🌟", time: new Date().toISOString() });

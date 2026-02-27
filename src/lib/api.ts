@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:5001/api";
+const BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "/api" : "http://127.0.0.1:5001/api");
 
 // ── helper ────────────────────────────────────────────────
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
